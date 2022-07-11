@@ -1,12 +1,14 @@
-import { IUser, IUserWithTests } from '../interfaces/user.interfaces';
 import { Roles } from '../../../constants/Roles';
 
-export class User implements IUser, IUserWithTests {
+export class User {
     id = 0;
     firstName = '';
     lastName = '';
     email = '';
     role = Roles.GUEST;
+    password = '';
 
-    tests = [];
+    getPassword() {
+        return this.password;
+    }
 }

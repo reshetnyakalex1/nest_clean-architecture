@@ -7,6 +7,7 @@ import { User } from './entities/User';
 import { UsersGatewayInterface } from './db/users.gateway.interface';
 import { usersGatewayToken } from './db/users.gateway.provider';
 import { NewUser } from './entities/NewUser';
+import { UserWithTests } from './entities/UserWithTests';
 
 @Injectable()
 export class UsersService implements UsersServiceInterface {
@@ -28,8 +29,12 @@ export class UsersService implements UsersServiceInterface {
         return { id };
     }
 
-    async getWithTests(id: number): Promise<User> {
-        return this.usersGateway.findOneWithTests(id);
+    async getWithTests(id: number): Promise<UserWithTests> {
+        const user = await this.usersGateway.findOneWithTests(id);
+        if (user === null) {
+            throw new NotFoundException("User doesn't exist");
+        }
+        return user;
     }
 
     async getAllUsers(id: number): Promise<User[]> {

@@ -1,12 +1,8 @@
-import { Body, Controller, Get, Inject, Logger, Param, Post } from '@nestjs/common';
+import { Controller, Get, Inject, Logger, Param } from '@nestjs/common';
 import { userServiceToken } from './users.service.provider';
 import { UsersServiceInterface } from './users.service.interface';
-import { CreateUserDto } from './DTOs/createUser.dto';
-import { UserEntity } from './db/typeorm/user.entity';
-import { IdObject } from '../../interfaces';
-import { IUserWithTests } from './interfaces/user.interfaces';
 import { User } from './entities/User';
-import { CreateUserDtoToUserMapper } from './mappers/CreateUserDtoToUserMapper';
+import { UserWithTests } from './entities/UserWithTests';
 
 @Controller('users')
 export class UsersController {
@@ -22,7 +18,7 @@ export class UsersController {
     }
 
     @Get(':id/tests')
-    getWithTests(@Param('id') id: number): Promise<IUserWithTests> {
+    getWithTests(@Param('id') id: number): Promise<UserWithTests> {
         return this.userService.getWithTests(id);
     }
 }

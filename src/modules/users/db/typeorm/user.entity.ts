@@ -1,10 +1,9 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { TestEntity } from '../../../tests/test.entity';
-import { IUser, IUserWithTests } from '../../interfaces/user.interfaces';
+import { TestEntity } from '../../../tests/db/test.entity';
 import { Roles } from '../../../../constants/Roles';
 
 @Entity({ name: 'User' })
-export class UserEntity implements IUser, IUserWithTests {
+export class UserEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -24,8 +23,4 @@ export class UserEntity implements IUser, IUserWithTests {
     role: Roles;
 
     @OneToMany(() => TestEntity, (test) => test.user) tests: TestEntity[];
-
-    isNew(): boolean {
-        return Boolean(this.id === 0);
-    }
 }

@@ -40,10 +40,6 @@ export class NewUser {
         return (this.hashedPassword = hashedPassword);
     }
 
-    getHashedPassword() {
-        return this.hashedPassword;
-    }
-
     getEmail() {
         return this.email;
     }

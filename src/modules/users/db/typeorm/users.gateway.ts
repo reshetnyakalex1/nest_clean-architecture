@@ -1,18 +1,20 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { User } from '../../entities/User';
 import { usersRepositoryToken } from '../users.repository.provider';
 import { UsersTypeormRepositoryInterface } from './users.typeorm.repository.interface';
 import { UsersGatewayInterface } from '../users.gateway.interface';
-import { UserEntityToUserMapper } from '../../mappers/UserEntityToUserMapper';
+import { UserEntityToUserMapper } from '../../mappers/UserEntityToUser.mapper';
 import { NewUser } from '../../entities/NewUser';
+import { UserEntityToUserWithTestsMapper } from '../../mappers/UserEntityToUserWithTests.mapper';
+import { UserWithTests } from '../../entities/UserWithTests';
 
 @Injectable()
 export class UsersGateway implements UsersGatewayInterface {
-    private readonly logger = new Logger('UsersGateway');
     constructor(@Inject(usersRepositoryToken) private readonly usersRepository: UsersTypeormRepositoryInterface) {}
 
     async findOne(id: number): Promise<User | null> {
         const userDBEntity = await this.usersRepository.findOne(id);
+        if (userDBEntity === null) return userDBEntity;
         const userEntityToUserMapper = new UserEntityToUserMapper();
         return userEntityToUserMapper.map(userDBEntity);
     }
@@ -29,10 +31,11 @@ export class UsersGateway implements UsersGatewayInterface {
         return this.usersRepository.insert(userDBEntity);
     }
 
-    async findOneWithTests(id: number): Promise<User> {
+    async findOneWithTests(id: number): Promise<UserWithTests | null> {
         const userDBEntity = await this.usersRepository.findOne(id);
-        const userEntityToUserMapper = new UserEntityToUserMapper();
-        return userEntityToUserMapper.map(userDBEntity);
+        if (userDBEntity === null) return userDBEntity;
+        const userEntityToUserWithTestsMapper = new UserEntityToUserWithTestsMapper();
+        return userEntityToUserWithTestsMapper.map(userDBEntity);
     }
 
     async getAll(): Promise<User[]> {

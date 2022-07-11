@@ -1,4 +1,13 @@
-import { BadRequestException, Body, ConflictException, Inject, Injectable, Logger } from '@nestjs/common';
+import {
+    BadRequestException,
+    Body,
+    ConflictException,
+    ForbiddenException,
+    Inject,
+    Injectable,
+    Logger,
+    NotFoundException,
+} from '@nestjs/common';
 import { userServiceToken } from '../users/users.service.provider';
 import { UsersServiceInterface } from '../users/users.service.interface';
 import { Token } from './entities/Token';
@@ -23,7 +32,16 @@ export class AuthService implements AuthServiceInterface {
     ) {}
 
     async login(credentials: Credentials): Promise<Token> {
-        const user = await this.userService.getById(1);
+        const user = await this.userService.getByEmail(credentials.email);
+
+        if (!user) {
+            throw new NotFoundException("User with this email doesn't exist.");
+        }
+
+        if (!(await this.hashService.compare(credentials.password, user.getPassword()))) {
+            throw new ForbiddenException('Your email or/and password is/are wrong.');
+        }
+
         const accessToken = await this.jwtService.signAsync({ id: user.id }, { expiresIn: '2h' });
         this.logger.log(`User: id ${user.id} just logged in.`);
         return this.authEntitiesFactory.getToken(accessToken);

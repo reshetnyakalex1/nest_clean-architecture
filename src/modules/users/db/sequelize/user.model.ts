@@ -1,5 +1,4 @@
 import { Column, Table, Model, PrimaryKey } from 'sequelize-typescript';
-import { IUser } from '../../interfaces/user.interfaces';
 import { Roles } from '../../../../constants/Roles';
 
 @Table({
@@ -7,7 +6,7 @@ import { Roles } from '../../../../constants/Roles';
     createdAt: false,
     updatedAt: false,
 })
-export class UserModel extends Model implements IUser {
+export class UserModel extends Model {
     @PrimaryKey
     @Column
     id: number;
@@ -20,8 +19,4 @@ export class UserModel extends Model implements IUser {
 
     @Column
     role: Roles;
-
-    isNew(): boolean {
-        return Boolean(this.id === 0);
-    }
 }

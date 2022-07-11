@@ -2,7 +2,6 @@ import { DeepPartial, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersTypeormRepositoryInterface } from './users.typeorm.repository.interface';
-import { IUser } from '../../interfaces/user.interfaces';
 
 export class UsersTypeormRepository implements UsersTypeormRepositoryInterface {
     constructor(
@@ -10,7 +9,7 @@ export class UsersTypeormRepository implements UsersTypeormRepositoryInterface {
         private readonly usersRepository: Repository<UserEntity>,
     ) {}
 
-    findOne(id: number): Promise<UserEntity> {
+    findOne(id: number): Promise<UserEntity | null> {
         return this.usersRepository.findOne({ where: { id } });
     }
 
@@ -24,7 +23,7 @@ export class UsersTypeormRepository implements UsersTypeormRepositoryInterface {
         return insertResult.raw.insertId;
     }
 
-    async findOneWithTests(id: number): Promise<UserEntity> {
+    async findOneWithTests(id: number): Promise<UserEntity | null> {
         return this.usersRepository.findOne({ where: { id }, relations: ['tests'] });
     }
 

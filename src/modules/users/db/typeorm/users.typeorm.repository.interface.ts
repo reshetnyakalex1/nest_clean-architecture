@@ -1,6 +1,4 @@
 import { UserEntity } from './user.entity';
-import { User } from '../../entities/User';
-import { IUser } from '../../interfaces/user.interfaces';
 import { DeepPartial } from 'typeorm';
 
 export interface UsersTypeormRepositoryInterface {

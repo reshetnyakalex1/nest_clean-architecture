@@ -8,9 +8,10 @@ import { LoginDtoToCredentialsMapper } from './mappers/LoginDtoToCredentials.map
 import { TokenToLoginResponseMapper } from './mappers/TokenToLoginResponse.mapper';
 import { LoginResponseDto } from './DTO/TokenResponse.dto';
 import { SignUpDto } from './DTO/SignUp.dto';
-import { SignUpDtoToNewUserMapper } from './mappers/SignUpDtoToNewUserMapper';
+import { SignUpDtoToNewUserMapper } from './mappers/SignUpDtoToNewUser.mapper';
 import { IdObject } from '../../interfaces';
 import { SignUpResponseDto } from './DTO/SignUpResponse.dto';
+import { IdObjectToSignUpResponseMapper } from './mappers/IdObjectToSignUpResponse.mapper';
 
 @Controller('/auth')
 export class AuthController {
@@ -22,9 +23,10 @@ export class AuthController {
         const signUpDtoToNewUserMapper = new SignUpDtoToNewUserMapper();
         const newUser = signUpDtoToNewUserMapper.map(signUpDto);
 
-        const res = await this.authService.signUp(newUser);
+        const userId = await this.authService.signUp(newUser);
 
-        return res;
+        const idObjectToSignUpResponseMapper = new IdObjectToSignUpResponseMapper();
+        return idObjectToSignUpResponseMapper.map(userId);
     }
 
     @Post('/auth-check')

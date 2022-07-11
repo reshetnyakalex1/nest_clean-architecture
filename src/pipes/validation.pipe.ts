@@ -20,7 +20,10 @@ export class ValidationPipe implements PipeTransform<any> {
     }
     private convertErrorsToMessage(errors: ValidationError[]): string[] {
         return errors.map((err) => {
-            return `${err.property} - ${Object.values(err.constraints).join(', ')}`;
+            if (err.constraints) {
+                return `${err.property} - ${Object.values(err.constraints).join(', ')}`;
+            }
+            return `${err.property}`;
         });
     }
 }

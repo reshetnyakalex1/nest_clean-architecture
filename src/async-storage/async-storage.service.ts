@@ -15,7 +15,7 @@ export class AsyncStorageService {
         this.asyncStore.getStore()?.set('traceId', traceId);
     }
 
-    getTraceId(): string {
-        return this.asyncStore.getStore()?.get('traceId');
+    getTraceId(): string | null {
+        return this.asyncStore.getStore()?.get('traceId') || null;
     }
 }

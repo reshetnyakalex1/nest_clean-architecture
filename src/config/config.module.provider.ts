@@ -1,6 +1,6 @@
 import { ConfigModule } from '@nestjs/config';
 
-export const Config = ConfigModule.forRoot({
+export const ConfigModuleProvider = ConfigModule.forRoot({
     envFilePath: '.env.dev',
     isGlobal: true,
 });

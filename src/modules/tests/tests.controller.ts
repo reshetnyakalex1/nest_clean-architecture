@@ -1,20 +1,18 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { CreateTestDto } from './DTOs/CreateTest.dto';
-import { TestEntity } from './test.entity';
-import { TestsFactory } from './tests.factory';
 import { testsServiceToken } from './tests.service.provider';
 import { TestsServiceInterface } from './tests.service.interface';
+import { CreateTestDtoToNewTestMapper } from './mappers/CreateTestDtoToNewTest.mapper';
+import { IdObject } from '../../interfaces';
 
 @Controller('tests')
 export class TestsController {
-    constructor(
-        private readonly testsFactory: TestsFactory,
-        @Inject(testsServiceToken) private readonly testsService: TestsServiceInterface,
-    ) {}
+    constructor(@Inject(testsServiceToken) private readonly testsService: TestsServiceInterface) {}
 
     @Post()
-    createTest(@Body() testDto: CreateTestDto): Promise<number> {
-        const test = this.testsFactory.createTest(testDto);
-        return this.testsService.create(test);
+    createTest(@Body() testDto: CreateTestDto): Promise<IdObject> {
+        const createTestDtoToNewTestMapper = new CreateTestDtoToNewTestMapper();
+        const newTest = createTestDtoToNewTestMapper.map(testDto);
+        return this.testsService.create(newTest);
     }
 }

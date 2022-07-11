@@ -1,5 +1,7 @@
 # NestJS project template
 
+A NestJS project template with an attempt to implement the clean architectures concepts.
+
 ## Installation
 
 ```bash

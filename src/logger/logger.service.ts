@@ -9,7 +9,7 @@ const pinoLogger = pino(pretty());
 export class PinoLoggerService implements LoggerService {
     constructor(private readonly asyncStorageService: AsyncStorageService) {}
 
-    error(message: any, trace?: string, context?: string): any {
+    error(message: any, trace?: string, context?: string): void {
         const traceId = this.asyncStorageService.getTraceId();
         pinoLogger.error({ traceId }, this.getMessage(message, context));
         if (trace) {
@@ -17,15 +17,20 @@ export class PinoLoggerService implements LoggerService {
         }
     }
 
-    log(message: any, context?: string): any {
+    log(message: any, context?: string): void {
         const traceId = this.asyncStorageService.getTraceId();
-        pinoLogger.info({ traceId }, this.getMessage(message, context));
+        if (traceId) {
+            return pinoLogger.info({ traceId }, this.getMessage(message, context));
+        }
+        return pinoLogger.info(this.getMessage(message, context));
     }
 
-    warn(message: any, context?: string): any {
+    warn(message: any, context?: string): void {
         const traceId = this.asyncStorageService.getTraceId();
-
-        pinoLogger.warn({ traceId }, this.getMessage(message, context));
+        if (traceId) {
+            return pinoLogger.info({ traceId }, this.getMessage(message, context));
+        }
+        return pinoLogger.info(this.getMessage(message, context));
     }
 
     private getMessage(message: any, context?: string) {
